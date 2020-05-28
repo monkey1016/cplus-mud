@@ -1,0 +1,5 @@
+cc_binary(
+  name = "cplus-mud",
+  srcs = ["main.cpp", "//lib/interaction:commands"],
+  deps = ["//lib", "//lib/interaction:commands"],
+)

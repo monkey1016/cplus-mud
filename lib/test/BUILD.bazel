@@ -1,0 +1,11 @@
+# filegroup(
+#   name = "test_files",
+#   srcs = 
+# )
+
+cc_test(
+  name = "tests",
+  srcs = glob(["test/**/*.cpp"]),
+  deps = ["@boost//:test", "@boost//:algorithm","//lib/main/rooms:rooms"]
+  # srcs = ["//lib:test_files"],
+)

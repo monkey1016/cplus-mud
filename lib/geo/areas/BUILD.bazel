@@ -1,0 +1,7 @@
+cc_library(
+  name = "areas",
+  srcs = ["base_area.cpp"],
+  hdrs = ["base_area.h"],
+  deps = ["//lib/geo/rooms:rooms","//lib/geo:geo_object"],
+  visibility = ["//lib/geo:__pkg__"]
+)

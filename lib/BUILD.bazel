@@ -1,0 +1,6 @@
+cc_library(
+  name = "lib",
+  srcs = [],
+  deps = ["//lib/geo", "//lib/data:database", "//lib/entity:entity"],# "//lib/interaction"],
+  visibility = ["//bin:__pkg__"]
+)

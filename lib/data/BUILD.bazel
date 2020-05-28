@@ -1,0 +1,7 @@
+cc_library(
+  name = "database",
+  srcs = glob(["lib/data/**/*.cpp"]),
+  hdrs = glob(["lib/data/**/*.h"]),
+  deps = ["//lib/geo:geo_object"],
+  visibility = ["//lib:__pkg__"],
+)

@@ -1,0 +1,12 @@
+cc_library(
+  name = "geo",
+  deps = ["//lib/geo/rooms:rooms", "//lib/geo/areas:areas"],
+  visibility = ["//lib:__pkg__"]
+)
+
+cc_library(
+  name = "geo_object",
+  hdrs = ["geo_object.h"],
+  # visibility = ["//visibility:public"],
+  visibility = ["//lib/geo/rooms:__pkg__", "//lib/geo/areas:__pkg__", "//lib/data:__pkg__"],
+)

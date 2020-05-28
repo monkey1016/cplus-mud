@@ -1,0 +1,42 @@
+load("//:parser.bzl", "parser_library")
+load("@rules_antlr//antlr:antlr4.bzl", antlr4 = "antlr")
+
+# parser_library(
+#   name = "commands-gen",
+#   lex_srcs = ["commands.ll"],
+#   yacc_srcs = ["commands.ypp"],
+#   visibility = [":__pkg__"]
+# )
+
+# cc_library(
+#   name = "commands-lib",
+#   srcs = [":commands-gen"],
+#   hdrs = ["scanner.h", "driver.hpp"],
+#   # visibility = [":__pkg__"],
+# )
+
+cc_library(
+  name = "interaction",
+  srcs = glob(["**/*.cpp"]),
+  hdrs = glob(["**/*.hpp", "**/*.h"]),
+  deps = [":commands-lib"],
+  visibility = ["//visibility:public"],
+)
+
+antlr4(
+    name = "parser",
+    srcs = ["commands.g4"],
+    language = "Cpp",
+    package = "commands",
+    no_visitor = True,
+)
+
+cc_library(
+  name = "commands",
+  srcs = [":parser"],
+  visibility = ["//visibility:public"],
+  deps = [
+    ":parser",
+    "@antlr4_runtimes//:cpp",
+  ],
+)
