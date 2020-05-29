@@ -3,18 +3,25 @@
 
 #include <string>
 #include "character_entity.hpp"
+#include <boost/uuid/uuid.hpp>
 
-using namespace std;
+using namespace boost::uuids;
 
 class PlayerEntity : public CharacterEntity {
-  private:
-    int experience;
-    int level;
-  
   public:
-    PlayerEntity(int id, BaseRoom* location, int experience, int level); //: BaseEntity(id, location);
+    PlayerEntity(uuid id, BaseRoom* location, string* name, string* description, int experience, int level);
+    PlayerEntity(uuid id, BaseRoom* location, int maxHealth, int experience, int level);
+    PlayerEntity(uuid id, BaseRoom* location);
     void levelUp();
     void addExp(int exp);
+
+  protected:
+    int experience;
+    int level;
+
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version);
 };
 
 #endif

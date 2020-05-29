@@ -4,9 +4,9 @@
 #include <string>
 using namespace std;
 class GeoObject {
-  public:
-    virtual string getFqdn();
-    virtual string saveMe();
+  // public:
+  //   virtual string getFqdn();
+  //   virtual string saveMe();
 };
 
 #endif

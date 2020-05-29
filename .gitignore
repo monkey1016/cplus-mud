@@ -2,3 +2,4 @@ bazel-*
 lex.yy.c*
 .vscode/
 .antlr/
+*.dat

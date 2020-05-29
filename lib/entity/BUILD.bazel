@@ -2,6 +2,6 @@ cc_library(
   name = "entity",
   srcs = glob(["*.cpp"]),
   hdrs = glob(["*.hpp"]),
-  deps = ["@boost//:format", "//lib/geo/rooms"],
+  deps = ["@boost//:format", "//lib/geo/rooms", "@boost//:uuid"],
   visibility = ["//lib:__pkg__"]
 )

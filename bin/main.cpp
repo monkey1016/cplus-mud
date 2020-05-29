@@ -7,6 +7,8 @@
 #include "commandsParser.h"
 #include "commandsBaseListener.h"
 #include "lib/entity/player_entity.hpp"
+#include <boost/uuid/uuid.hpp>            // uuid class
+#include <boost/uuid/uuid_generators.hpp> // generators
 
 // #include "lib/interaction/command.h"
 // #include "lib/interaction/scanner.h"
@@ -36,6 +38,8 @@ class commandsTreeShapeListener : public commandsBaseListener
 
 int main(int argc, char* argv[]) {
 
+  cout << "main" << endl;
+
   // std::ifstream stream;
   // stream.open(argv[1]);
   string commandInput;
@@ -52,11 +56,20 @@ int main(int argc, char* argv[]) {
   //   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, context);
   // }
 
+  cout << "About to setup game" << endl;
   setupGame();
   return 0;
 }
 
 void setupGame()
 {
-  PlayerEntity* player = new PlayerEntity(0, nullptr, 0, 0);
+  cout << "Starting game" << endl;
+  boost::uuids::random_generator generator;
+  boost::uuids::uuid player_uuid = generator();
+
+  string playerName = "Player";
+  string playerDescription = "The player";
+  PlayerEntity* player = new PlayerEntity(player_uuid, nullptr, &playerName, &playerDescription, 0, 0);
+
+  player->saveEntity();
 }

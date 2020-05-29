@@ -3,18 +3,27 @@
 
 #include <string>
 #include "lib/geo/geo_object.h"
+#include <boost/uuid/uuid.hpp>
 
 using namespace std;
+using namespace boost::uuids;
 
 class BaseRoom : public GeoObject {
   private:
     string* name;
     string* description;
+    boost::uuids::uuid id;
+
   public:
-    BaseRoom(string name, string description);
+    BaseRoom(uuid id, string* name, string* description);
     string* getName();
+    uuid getId();
     void setName(string* name);
     void setDescription(string* description);
+  
+  // protected:
+  //   template<class Archive>
+  //   void serialize(Archive& archive, const unsigned int version);
 };
 
 #endif
