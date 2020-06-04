@@ -2,14 +2,31 @@
 #include <iostream>
 #include "base_entity.hpp"
 #include <boost/format.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
 #include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_serialize.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/filesystem.hpp>
+#include <boost/json.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/severity_feature.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/core.hpp>
 #include <fstream>
 
 using namespace std;
+using namespace mud::entities;
+namespace json = boost::json;
+
+extern string APPLICATION_DIRECTORY;
+
+EntityManagerRegister<BaseEntity> BaseEntity::registration("mud::entities::BaseEntity");
+
+BaseEntity::BaseEntity()
+{
+  boost::uuids::random_generator generator;
+  boost::uuids::uuid player_uuid = generator();
+  this->id = player_uuid;
+}
 
 BaseEntity::BaseEntity(uuid id)
 {
@@ -66,34 +83,65 @@ ostream& operator <<(ostream& outputStream, const BaseEntity& b)
   return outputStream;
 }
 
-template<class Archive>
-void BaseEntity::serialize(Archive& archive, const unsigned int version)
-{
-  archive & *description;
-  archive & *name;
-  archive & id;
-  if(location != nullptr)
-  {
-    archive & location->getId();
-  }
-}
+// template<class Archive>
+// void BaseEntity::serialize(Archive& archive, const unsigned int version)
+// {
+//   archive & *description;
+//   archive & *name;
+//   archive & id;
+//   if(location != nullptr)
+//   {
+//     archive & location->getId();
+//   }
+// }
 
 bool BaseEntity::saveEntity()
 {
-  cout << "Saving object: " << endl;
-  cout << *name << endl;
-  string filename = *name + ".dat";
-  std::ofstream ofs(filename.c_str());
-  boost::archive::text_oarchive oa(ofs);
+  // cout << "Saving object: " << endl;
+  // cout << *name << endl;
+  string filePath = APPLICATION_DIRECTORY + "/data/";
+  string filename = *name + ".json";
+  boost::filesystem::path dir(filePath.c_str());
+  BOOST_LOG_SEV(logger, info) << "Testing";
+  cout << "Filename: " << filename << endl;
+  if(boost::filesystem::create_directory(dir))
+  {
+    cerr << "Directory Created: " << filePath << endl;
+  }
+  std::ofstream ofs((filePath + filename).c_str());
   try
   {
-    oa << this;
+    // boost::archive::text_oarchive oa(ofs);
+    ofs << this->toJsonString().c_str();
   } 
   catch (const std::exception& e)
   {
-    cout << "Failed to save object: " << e.what();
+    cout << "Failed to save object: " << e.what() << endl;
     return false;
   }
 
   return true;
+}
+
+void BaseEntity::toJson(json::object& obj)
+{
+  obj.insert_or_assign("class", "mud::entities::BaseEntity");
+  obj.insert_or_assign("id", boost::uuids::to_string(id).c_str());
+  obj.insert_or_assign("name", (*name).c_str());
+  obj.insert_or_assign("description", (*description).c_str());
+  if(location != nullptr)
+  {
+    obj.insert_or_assign("location", boost::uuids::to_string(location->getId()).c_str());
+  }
+  else
+  {
+    obj.insert_or_assign("location", nullptr);
+  }
+}
+
+json::string BaseEntity::toJsonString()
+{
+  json::object obj;
+  this->toJson(obj);
+  return json::to_string(obj);
 }

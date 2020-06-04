@@ -9,6 +9,14 @@
 #include "lib/entity/player_entity.hpp"
 #include <boost/uuid/uuid.hpp>            // uuid class
 #include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/property_tree/ptree.hpp>
+
+#ifdef WINDOWS
+  #define SEPARATOR "\\"
+#else
+  #define SEPARATOR "/"
+#endif
+
 
 // #include "lib/interaction/command.h"
 // #include "lib/interaction/scanner.h"
@@ -18,6 +26,8 @@
 
 using namespace std;
 using namespace commands;
+
+string APPLICATION_DIRECTORY;
 void setupGame();
 
 class commandsTreeShapeListener : public commandsBaseListener 
@@ -39,6 +49,9 @@ class commandsTreeShapeListener : public commandsBaseListener
 int main(int argc, char* argv[]) {
 
   cout << "main" << endl;
+
+  string argv_str(argv[0]);
+  APPLICATION_DIRECTORY = argv_str.substr(0, argv_str.find_last_of(SEPARATOR));
 
   // std::ifstream stream;
   // stream.open(argv[1]);
@@ -69,7 +82,8 @@ void setupGame()
 
   string playerName = "Player";
   string playerDescription = "The player";
-  PlayerEntity* player = new PlayerEntity(player_uuid, nullptr, &playerName, &playerDescription, 0, 0);
+  mud::entities::PlayerEntity* player = new mud::entities::PlayerEntity(player_uuid, nullptr, &playerName, &playerDescription, 0, 0);
 
   player->saveEntity();
+  // cout << "JSON:\n" << player->toJsonString().c_str() << endl;
 }

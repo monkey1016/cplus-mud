@@ -1,7 +1,39 @@
+# load("@rules_foreign_cc//tools/build_defs:cmake.bzl", "cmake_external")
+
 cc_library(
   name = "entity",
   srcs = glob(["*.cpp"]),
   hdrs = glob(["*.hpp"]),
-  deps = ["@boost//:format", "//lib/geo/rooms", "@boost//:uuid"],
+  # deps = ["@boost//:format", "//lib/geo/rooms", "@boost//:uuid", "@boost//:filesystem", ":boost-json"], #"@boost-json//:json"],
+  deps = ["@boost//:format", "//lib/geo/rooms", "@boost//:uuid", "@boost//:filesystem", "@boost-json//:json", "@boost//:log"],
+  # copts = ["-Iexternal/boost-json/include"],
+  # copts = ["-Iexternal/boost-json/include"],
   visibility = ["//lib:__pkg__"]
 )
+
+# cc_proto_library(
+#   name = "entities_cc_proto",
+#   deps = [":entities_proto"],
+# )
+
+# proto_library(
+#   name = "entities_proto",
+#   srcs = ["entities.proto"]
+# )
+
+# cmake_external(
+#    name = "boost-json",
+#    # Values to be passed as -Dkey=value on the CMake command line;
+#    # here are serving to provide some CMake script configuration options
+#   #  cache_entries = {
+#   #      "NOFORTRAN": "on",
+#   #      "BUILD_WITHOUT_LAPACK": "no",
+#   #  },
+#    lib_source = "@boost-json//:all",
+
+#    # We are selecting the resulting static library to be passed in C/C++ provider
+#    # as the result of the build;
+#    # However, the cmake_external dependants could use other artefacts provided by the build,
+#    # according to their CMake script
+#    static_libraries = ["libboostjson.a"],
+# )

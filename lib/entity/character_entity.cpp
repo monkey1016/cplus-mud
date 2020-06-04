@@ -1,9 +1,13 @@
 #include "character_entity.hpp"
 #include "base_entity.hpp"
 #include <boost/uuid/uuid.hpp>
+#include <boost/property_tree/ptree.hpp>
+
 
 
 using namespace boost::uuids;
+using namespace mud::entities;
+using boost::property_tree::ptree;
 
 CharacterEntity::CharacterEntity(uuid id, BaseRoom* location, string* name, string* description) : BaseEntity(id, location, name, description)
 {
@@ -45,10 +49,18 @@ bool CharacterEntity::isAlive()
   return currentHealth > 0;
 }
 
-template<class Archive>
-void CharacterEntity::serialize(Archive& archive, const unsigned int version)
+// template<class Archive>
+// void CharacterEntity::serialize(Archive& archive, const unsigned int version)
+// {
+//   archive & boost::serialization::base_object<BaseEntity>(*this);
+//   archive & maxHealth;
+//   archive & currentHealth;
+// }
+
+void CharacterEntity::toJson(json::object& obj)
 {
-  archive & boost::serialization::base_object<BaseEntity>(*this);
-  archive & maxHealth;
-  archive & currentHealth;
+  this->BaseEntity::toJson(obj);
+  obj.insert_or_assign("class", "mud::entities::CharacterEntity");
+  obj.insert_or_assign("maxHealth", this->maxHealth);
+  obj.insert_or_assign("currentHealth", this->currentHealth);
 }

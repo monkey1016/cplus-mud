@@ -1,0 +1,11 @@
+{
+  "class": "mud::entities::PlayerEntity",
+  "id": "4e66a8fa-5c14-471e-800f-0fd6dababae4",
+  "name": "Shadowman",
+  "description": "The player",
+  "location": null,
+  "maxHealth": 100,
+  "currentHealth": 100,
+  "experience": 0,
+  "level": 1
+}

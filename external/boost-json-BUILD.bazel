@@ -1,0 +1,7 @@
+cc_library(
+  name = "json",
+  srcs = ["src/src.cpp"],
+  hdrs = glob(["include/**/*.hpp","include/**/*.ipp","include/**/*.natvis"]),
+  strip_include_prefix = "include",
+  visibility = ["//visibility:public"]
+)

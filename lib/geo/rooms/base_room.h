@@ -12,7 +12,7 @@ class BaseRoom : public GeoObject {
   private:
     string* name;
     string* description;
-    boost::uuids::uuid id;
+    uuid id;
 
   public:
     BaseRoom(uuid id, string* name, string* description);
